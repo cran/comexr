@@ -1,0 +1,193 @@
+---
+title: "Getting Started with comex"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with comex}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Overview
+
+The **comex** package provides an R interface to the
+[ComexStat API](https://comexstat.mdic.gov.br/) from the Brazilian
+Ministry of Development, Industry, Trade and Services (MDIC). It gives
+you programmatic access to:
+ 
+- **General trade data** — exports and imports from 1997 to present,
+  with 22 detail/grouping fields and 6 metrics.
+- **City-level trade data** — trade statistics broken down by
+  municipality.
+- **Historical data** — export/import records from 1989 to 1996
+  using the older NBM nomenclature.
+- **Auxiliary lookup tables** — countries, economic blocs, states,
+  cities, transport modes, customs units, and product nomenclatures
+  (NCM, NBM, HS, CGCE, SITC).
+
+The package has only two dependencies (`httr2` and `cli`) and does not
+require a headless browser or any external software.
+
+## Installation
+
+```{r install}
+# Install from GitHub:
+remotes::install_github("StrategicProjects/comexr")
+```
+
+## Quick start
+
+### 1. Check what data is available
+
+Before querying, you can discover the date range, available grouping
+fields (details), and metrics for each data type:
+
+```{r discover}
+library(comex)
+
+# What is the most recent data available?
+comex_last_update("general")
+#> $updated
+#> [1] "2026-02-05"
+#> $year
+#> [1] "2026"
+#> $monthNumber
+#> [1] "01"
+
+# What years are covered?
+comex_available_years("general")
+#> $max
+#> [1] "2026"
+#> $min
+#> [1] "1997"
+
+# What detail/grouping fields can I use?
+comex_details("general")
+#> # A tibble: 22 × 2
+#>    filter        text
+#>    <chr>         <chr>
+#>  1 country       Countries
+#>  2 economicBlock Economic Blocks
+#>  3 state         States
+#>  4 ...
+```
+
+### 2. Run a simple export query
+
+The easiest way to query is with `comex_export()` and `comex_import()`:
+
+```{r simple_query}
+# Top export destinations in January 2024
+exports <- comex_export(
+  start_period = "2024-01",
+  end_period   = "2024-01",
+  details      = "country"
+)
+
+exports
+#> # A tibble: 219 × 4
+#>    year  country                   metricFOB metricKG
+#>    <chr> <chr>                         <dbl>    <dbl>
+#>  1 2024  China                    7812623070    ...
+#>  2 2024  United States            3254810234    ...
+#>  3 2024  Argentina                 916456789    ...
+#>  ...
+```
+
+### 3. Add filters and multiple details
+
+```{r filtered_query}
+# Exports to China and USA, broken down by HS4 product group
+exports_filtered <- comex_export(
+  start_period = "2024-01",
+  end_period   = "2024-06",
+  details      = c("country", "hs4"),
+  filters      = list(country = c(160, 249)),
+  month_detail = TRUE
+)
+```
+
+Filter codes come from the auxiliary tables — use `comex_countries()`,
+`comex_states()`, etc. to look them up.
+
+### 4. Look up auxiliary tables
+
+```{r tables}
+# All countries
+countries <- comex_countries()
+countries
+#> # A tibble: 281 × 2
+#>    id    text
+#>    <chr> <chr>
+#>  1 994   A Designar
+#>  2 132   Afeganistão
+#>  ...
+
+# Search for a specific country
+comex_countries(search = "Brazil")
+```
+
+## Available detail names
+
+The `details` parameter accepts user-friendly names that are mapped to
+the API's internal names. Here is the full list:
+
+| User name | API name | Available in |
+|---|---|---|
+| `country` | country | general, city, historical |
+| `bloc` / `economic_block` | economicBlock | general, city |
+| `state` | state | general, city |
+| `city` | city | city |
+| `transport_mode` | transportMode | general |
+| `customs_unit` | urf | general |
+| `ncm` | ncm | general |
+| `hs6` / `sh6` | sh6 | general |
+| `hs4` / `sh4` | sh4 | general |
+| `hs2` / `sh2` | sh2 | general |
+| `section` | section | general, city |
+| `cgce_n1` / `cgce_n2` / `cgce_n3` | cgceN1/N2/N3 | general |
+| `sitc_section` ... `sitc_item` | cuciSection...cuciItem | general |
+| `isic_section` ... `isic_class` | isicSection...isicClass | general |
+| `nbm` | nbm | historical |
+| `company_size` | companySize | general |
+
+**Note:** City endpoint uses `heading` (≈HS4), `chapter` (≈HS2),
+`section` — not sh2/sh4/sh6. Use `comex_details("city")` to confirm.
+
+## Language support
+
+All functions accept a `language` parameter. Use `"pt"` (Portuguese),
+`"en"` (English), or `"es"` (Spanish):
+  
+```{r language}
+comex_blocs(language = "pt")
+#> # A tibble: 12 × 2
+#>    id    text
+#>    <chr> <chr>
+#>  1 105   América Central e Caribe
+#>  2 107   América do Norte
+#>  ...
+
+comex_blocs(language = "en")
+#> # A tibble: 12 × 2
+#>    id    text
+#>    <chr> <chr>
+#>  1 105   Central America and Caribbean
+#>  2 107   North America
+#>  ...
+```
+
+## Next steps
+
+- See `vignette("querying-trade-data")` for advanced query patterns
+  including monthly breakdowns, multiple metrics, CIF values, and
+  working with city and historical endpoints.
+- See `vignette("auxiliary-tables")` for a tour of all lookup tables
+  (NCM, HS, countries, blocs, classifications).
