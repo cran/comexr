@@ -1,67 +1,56 @@
-
-# comexr <img src="man/figures/logo.svg" align="right" height="139" alt="comex logo" />
+# comexr <img src="man/figures/logo.svg" align="right" height="139" alt="comexr logo" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://img.shields.io/badge/R--CMD--check-passing-brightgreen)](https://github.com/StrategicProjects/comexr)
-![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/comexr)  
-![CRAN Downloads](https://cranlogs.r-pkg.org/badges/grand-total/comexr)
-  ![License](https://img.shields.io/badge/license-MIT-darkviolet.svg) 
-![](https://img.shields.io/badge/dev%20version-0.2.0-blue.svg)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/comexr)](https://CRAN.R-project.org/package=comexr)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-R client for the [ComexStat API](https://comexstat.mdic.gov.br/) — Brazilian
-foreign trade statistics from the Ministry of Development, Industry, Trade and
-Services (MDIC).
+The **comexr** package provides a complete R interface to the [ComexStat API](https://api-comexstat.mdic.gov.br/docs#/) from the Brazilian Ministry of Development, Industry, Trade and Services (MDIC). It allows programmatic access to detailed Brazilian export and import data.
 
 ## Features
 
-- **30 functions** covering all 38 API endpoints
+- **30 functions** covering all API endpoints
 - **General trade data** (1997–present), **city-level** data, and **historical** records (1989–1996)
 - **Auxiliary tables**: countries, economic blocs, NCM/NBM/HS product codes, CGCE/SITC/ISIC classifications, states, cities, transport modes, customs units
+- **Only 2 dependencies**: `httr2` + `cli`
 - **Multilingual**: Portuguese, English, Spanish
-- User-friendly parameter names mapped automatically to API names
+- **SSL auto-fallback**: handles ICP-Brasil certificate issues transparently
 
 ## Installation
 
 ```r
-# From GitHub
+# Install from GitHub
+# install.packages("remotes")
 remotes::install_github("StrategicProjects/comexr")
 ```
 
-## Quick start
+## Quick Start
 
 ```r
 library(comexr)
 
-# Top export destinations in January 2024
+# Exports by country in January 2024 (monthly detail by default)
 exports <- comex_export(
   start_period = "2024-01",
-  end_period   = "2024-01",
-  details      = "country"
+  end_period = "2024-01",
+  details = "country"
 )
-exports
-#> # A tibble: 219 × 4
-#>    year  country          metricFOB    metricKG
-#>    <chr> <chr>                <dbl>       <dbl>
-#>  1 2024  China           7812623070 19868234567
-#>  2 2024  United States   3254810234  2547891234
-#>  ...
 
 # Imports with CIF value
 imports <- comex_import(
   start_period = "2024-01",
-  end_period   = "2024-01",
-  details      = "country",
-  metric_cif   = TRUE
+  end_period = "2024-12",
+  details = "country",
+  metric_cif = TRUE
 )
 
 # Filter: exports to China (160), grouped by HS4
 soy <- comex_export(
   start_period = "2024-01",
-  end_period   = "2024-12",
-  details      = c("country", "hs4"),
-  filters      = list(country = 160),
-  month_detail = TRUE
+  end_period = "2024-12",
+  details = c("country", "hs4"),
+  filters = list(country = 160)
 )
 ```
 
@@ -75,33 +64,67 @@ comex_details("general")
 comex_filters("general")
 
 # Look up country codes
-comex_countries(search = "China")
+countries <- comex_countries()
+countries[grepl("China", countries$text, ignore.case = TRUE), ]
 
 # Economic blocs in Portuguese
 comex_blocs(language = "pt")
 ```
 
-## Function overview
+## API Coverage
 
-| Category | Functions |
-|---|---|
-| **Queries** | `comex_query()`, `comex_export()`, `comex_import()`, `comex_query_city()`, `comex_historical()` |
-| **Metadata** | `comex_last_update()`, `comex_available_years()`, `comex_filters()`, `comex_filter_values()`, `comex_details()`, `comex_metrics()` |
-| **Geography** | `comex_countries()`, `comex_country_detail()`, `comex_blocs()`, `comex_states()`, `comex_state_detail()`, `comex_cities()`, `comex_city_detail()`, `comex_transport_modes()`, `comex_transport_mode_detail()`, `comex_customs_units()`, `comex_customs_unit_detail()` |
-| **Products** | `comex_ncm()`, `comex_ncm_detail()`, `comex_nbm()`, `comex_nbm_detail()`, `comex_hs()` |
-| **Classifications** | `comex_cgce()`, `comex_sitc()`, `comex_isic()` |
+### Query Functions
 
-## Documentation
+| Function | Description |
+|----------|-------------|
+| `comex_query()` | General foreign trade query |
+| `comex_export()` | Shortcut for export queries |
+| `comex_import()` | Shortcut for import queries |
+| `comex_query_city()` | City-level data query |
+| `comex_historical()` | Historical data (1989-1996) |
 
-- `vignette("getting-started")` — overview and first steps
-- `vignette("querying-trade-data")` — advanced query patterns
-- `vignette("auxiliary-tables")` — browsing product codes and classifications
+### Metadata Functions
 
-## API Reference
+| Function | Description |
+|----------|-------------|
+| `comex_last_update()` | Last data update date |
+| `comex_available_years()` | Available years for queries |
+| `comex_filters()` | Available filters |
+| `comex_filter_values()` | Values for a specific filter |
+| `comex_details()` | Available detail/grouping fields |
+| `comex_metrics()` | Available metrics |
 
-This package wraps the official ComexStat API documented at
-<https://api-comexstat.mdic.gov.br/docs>.
+### Auxiliary Tables
+
+| Function | Description |
+|----------|-------------|
+| `comex_countries()` / `comex_country_detail()` | Countries |
+| `comex_blocs()` | Economic blocs |
+| `comex_states()` / `comex_state_detail()` | Brazilian states |
+| `comex_cities()` / `comex_city_detail()` | Brazilian cities |
+| `comex_transport_modes()` / `comex_transport_mode_detail()` | Transport modes |
+| `comex_customs_units()` / `comex_customs_unit_detail()` | Customs units |
+| `comex_ncm()` / `comex_ncm_detail()` | NCM codes |
+| `comex_nbm()` / `comex_nbm_detail()` | NBM codes (historical) |
+| `comex_hs()` | Harmonized System |
+| `comex_cgce()` | CGCE (BEC) classification |
+| `comex_sitc()` | SITC classification |
+| `comex_isic()` | ISIC classification |
+
+## SSL Certificate Issues
+
+On some systems the API's ICP-Brasil certificate chain is not recognized. The package handles this automatically — on the first failure it retries without SSL verification and issues a warning. To suppress:
+
+```r
+options(comex.ssl_verifypeer = FALSE)
+```
+
+## References
+
+- [ComexStat](https://comexstat.mdic.gov.br/en/home) — Brazilian foreign trade statistics
+- [ComexStat API Docs](https://api-comexstat.mdic.gov.br/docs) — Official API documentation
+- [MDIC](https://www.gov.br/mdic/pt-br) — Ministry of Development, Industry, Trade and Services
 
 ## License
 
-MIT
+MIT © comexr authors

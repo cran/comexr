@@ -9,7 +9,7 @@ comex_import(
   end_period,
   details = NULL,
   filters = NULL,
-  month_detail = FALSE,
+  month_detail = TRUE,
   metric_fob = TRUE,
   metric_kg = TRUE,
   metric_statistic = FALSE,

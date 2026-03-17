@@ -14,18 +14,12 @@
 #' @param start_period Start period in `"YYYY-MM"` format (e.g. `"1990-01"`).
 #' @param end_period End period in `"YYYY-MM"` format (e.g. `"1996-12"`).
 #' @param details Character vector of detail/grouping fields. Options:
-#'   `"country"`, `"state"`, `"ncm"` (actually NBM for this period).
+#'   `"country"`, `"state"`, `"nbm"`.
 #' @param filters Named list of filters.
 #' @param month_detail Logical. If `TRUE`, break down by month.
-#'   Default: `FALSE`.
+#'   Default: `TRUE`.
 #' @param metric_fob Logical. Include FOB value (US$). Default: `TRUE`.
 #' @param metric_kg Logical. Include net weight (kg). Default: `TRUE`.
-#' @param metric_statistic Logical. Include statistical quantity.
-#'   Default: `FALSE`.
-#' @param metric_freight Logical. Include freight value (US$). Default: `FALSE`.
-#' @param metric_insurance Logical. Include insurance value (US$).
-#'   Default: `FALSE`.
-#' @param metric_cif Logical. Include CIF value (US$). Default: `FALSE`.
 #' @param language Response language: `"pt"`, `"en"`, or `"es"`.
 #'   Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `TRUE`.
@@ -35,9 +29,10 @@
 #' @details
 #' Historical data differs from general data:
 #' - Available period: **1989 to 1996** only
-#' - Limited details: `"country"`, `"state"`, `"ncm"`
+#' - Limited details: `"country"`, `"state"`, `"nbm"`
 #' - Product classification is **NBM** (not NCM)
-#' - All six metrics are available (FOB, KG, Statistic, Freight, Insurance, CIF)
+#' - Only **FOB and KG** metrics are available (no statistic, freight,
+#'   insurance, or CIF)
 #'
 #' @examples
 #' \dontrun{
@@ -48,15 +43,6 @@
 #'   end_period = "1996-12",
 #'   details = "country"
 #' )
-#'
-#' # Historical imports with CIF value
-#' comex_historical(
-#'   flow = "import",
-#'   start_period = "1990-01",
-#'   end_period = "1992-12",
-#'   details = c("ncm", "country"),
-#'   metric_cif = TRUE
-#' )
 #' }
 #'
 #' @export
@@ -65,13 +51,9 @@ comex_historical <- function(flow = "export",
                              end_period,
                              details = NULL,
                              filters = NULL,
-                             month_detail = FALSE,
+                             month_detail = TRUE,
                              metric_fob = TRUE,
                              metric_kg = TRUE,
-                             metric_statistic = FALSE,
-                             metric_freight = FALSE,
-                             metric_insurance = FALSE,
-                             metric_cif = FALSE,
                              language = "en",
                              verbose = TRUE) {
 
@@ -95,20 +77,21 @@ comex_historical <- function(flow = "export",
     )
   }
 
+  # Historical endpoint only supports FOB and KG metrics
+  metrics <- character()
+  if (metric_fob) metrics <- c(metrics, "metricFOB")
+  if (metric_kg)  metrics <- c(metrics, "metricKG")
+  if (length(metrics) == 0) {
+    cli::cli_abort("At least one metric must be selected (metric_fob or metric_kg).")
+  }
+
   body <- list(
     flow        = flow_api,
     monthDetail = month_detail,
     period      = list(from = start_period, to = end_period),
     filters     = build_filters(filters),
     details     = build_details(details),
-    metrics     = build_metrics(
-      metric_fob       = metric_fob,
-      metric_kg        = metric_kg,
-      metric_statistic = metric_statistic,
-      metric_freight   = metric_freight,
-      metric_insurance = metric_insurance,
-      metric_cif       = metric_cif
-    )
+    metrics     = as.list(metrics)
   )
 
   # Note: the API spec defines this endpoint with a trailing slash

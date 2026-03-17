@@ -6,6 +6,44 @@
 # HTTP helpers
 # -------------------------------------------------------------------------
 
+#' Apply SSL options to request
+#' @noRd
+comex_req_options <- function(req) {
+  if (isFALSE(getOption("comex.ssl_verifypeer", TRUE))) {
+    return(req |> httr2::req_options(ssl_verifypeer = 0))
+  }
+  req
+}
+
+#' Perform request with SSL auto-fallback
+#' @noRd
+safe_perform <- function(req) {
+  tryCatch(
+    httr2::req_perform(req),
+    error = function(e) {
+      # httr2 wraps curl errors: e$message = "Failed to perform HTTP request."
+      # The actual SSL message is in e$parent$message
+      full_msg <- paste(
+        conditionMessage(e),
+        if (!is.null(e$parent)) conditionMessage(e$parent) else ""
+      )
+      if (grepl("SSL|certificate|peer", full_msg, ignore.case = TRUE)) {
+        cli::cli_warn(c(
+          "!" = "SSL certificate verification failed.",
+          "i" = "Retrying without SSL verification.",
+          "i" = "To suppress: {.code options(comex.ssl_verifypeer = FALSE)}"
+        ))
+        options(comex.ssl_verifypeer = FALSE)
+        req2 <- req |> httr2::req_options(ssl_verifypeer = 0)
+        httr2::req_perform(req2)
+      } else {
+        stop(e)
+      }
+    }
+  )
+}
+
+
 #' Perform a GET request to the ComexStat API
 #'
 #' @param endpoint Relative path (e.g. "/tables/countries").
@@ -24,7 +62,8 @@ comex_get <- function(endpoint, query = list(), verbose = TRUE) {
     httr2::req_headers(Accept = "application/json") |>
     httr2::req_timeout(60) |>
     httr2::req_retry(max_tries = 3, backoff = ~ 2) |>
-    httr2::req_error(is_error = function(resp) FALSE)
+    httr2::req_error(is_error = function(resp) FALSE) |>
+    comex_req_options()
 
   # Append query params (dropping NULLs)
   query <- Filter(Negate(is.null), query)
@@ -32,7 +71,7 @@ comex_get <- function(endpoint, query = list(), verbose = TRUE) {
     req <- do.call(httr2::req_url_query, c(list(req), query))
   }
 
-  resp <- httr2::req_perform(req)
+  resp <- safe_perform(req)
   status <- httr2::resp_status(resp)
 
   if (status >= 400) {
@@ -74,14 +113,15 @@ comex_post <- function(endpoint, body, query = list(), verbose = TRUE) {
     httr2::req_body_json(body, auto_unbox = TRUE) |>
     httr2::req_timeout(120) |>
     httr2::req_retry(max_tries = 3, backoff = ~ 2) |>
-    httr2::req_error(is_error = function(resp) FALSE)
+    httr2::req_error(is_error = function(resp) FALSE) |>
+    comex_req_options()
 
   query <- Filter(Negate(is.null), query)
   if (length(query) > 0) {
     req <- do.call(httr2::req_url_query, c(list(req), query))
   }
 
-  resp <- httr2::req_perform(req)
+  resp <- safe_perform(req)
   status <- httr2::resp_status(resp)
 
   if (status >= 400) {
@@ -315,14 +355,13 @@ convert_flow <- function(flow) {
 .details_map <- c(
   # Geographic
   country        = "country",
-  bloc           = "bloc",
+  bloc           = "economicBlock",
   economic_block = "economicBlock",
   state          = "state",
-
   city           = "city",
   transport_mode = "transportMode",
   customs_unit   = "urf",
-  # Products - NCM / HS
+  # Products - NCM / HS (general)
   ncm            = "ncm",
   hs6            = "sh6",
   sh6            = "sh6",
@@ -331,6 +370,9 @@ convert_flow <- function(flow) {
   hs2            = "sh2",
   sh2            = "sh2",
   section        = "section",
+  # Products - city endpoint names
+  heading        = "heading",
+  chapter        = "chapter",
   # CGCE
   cgce_n1        = "cgceN1",
   cgce_n2        = "cgceN2",

@@ -1,7 +1,8 @@
 Package: comexr
 Title: Client for the Brazilian Foreign Trade Statistics API
         ('ComexStat')
-Version: 0.2.0
+Version: 0.2.1
+Date: 2026-03-10
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
     person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
@@ -33,7 +34,7 @@ VignetteBuilder: knitr
 Config/testthat/edition: 3
 Language: en-US
 NeedsCompilation: no
-Packaged: 2026-03-05 13:05:42 UTC; leite
+Packaged: 2026-03-10 18:53:47 UTC; leite
 Author: Andre Leite [aut, cre],
   Marcos Wasilew [aut],
   Hugo Vasconcelos [aut],
@@ -41,4 +42,4 @@ Author: Andre Leite [aut, cre],
   Diogo Bezerra [aut]
 Maintainer: Andre Leite <leite@castlab.org>
 Repository: CRAN
-Date/Publication: 2026-03-10 11:20:02 UTC
+Date/Publication: 2026-03-17 14:40:03 UTC

@@ -10,13 +10,9 @@ comex_historical(
   end_period,
   details = NULL,
   filters = NULL,
-  month_detail = FALSE,
+  month_detail = TRUE,
   metric_fob = TRUE,
   metric_kg = TRUE,
-  metric_statistic = FALSE,
-  metric_freight = FALSE,
-  metric_insurance = FALSE,
-  metric_cif = FALSE,
   language = "en",
   verbose = TRUE
 )
@@ -29,26 +25,16 @@ comex_historical(
 \item{end_period}{End period in \code{"YYYY-MM"} format (e.g. \code{"1996-12"}).}
 
 \item{details}{Character vector of detail/grouping fields. Options:
-\code{"country"}, \code{"state"}, \code{"ncm"} (actually NBM for this period).}
+\code{"country"}, \code{"state"}, \code{"nbm"}.}
 
 \item{filters}{Named list of filters.}
 
 \item{month_detail}{Logical. If \code{TRUE}, break down by month.
-Default: \code{FALSE}.}
+Default: \code{TRUE}.}
 
 \item{metric_fob}{Logical. Include FOB value (US$). Default: \code{TRUE}.}
 
 \item{metric_kg}{Logical. Include net weight (kg). Default: \code{TRUE}.}
-
-\item{metric_statistic}{Logical. Include statistical quantity.
-Default: \code{FALSE}.}
-
-\item{metric_freight}{Logical. Include freight value (US$). Default: \code{FALSE}.}
-
-\item{metric_insurance}{Logical. Include insurance value (US$).
-Default: \code{FALSE}.}
-
-\item{metric_cif}{Logical. Include CIF value (US$). Default: \code{FALSE}.}
 
 \item{language}{Response language: \code{"pt"}, \code{"en"}, or \code{"es"}.
 Default: \code{"en"}.}
@@ -68,9 +54,10 @@ Nomenclature of Goods) classification.
 Historical data differs from general data:
 \itemize{
 \item Available period: \strong{1989 to 1996} only
-\item Limited details: \code{"country"}, \code{"state"}, \code{"ncm"}
+\item Limited details: \code{"country"}, \code{"state"}, \code{"nbm"}
 \item Product classification is \strong{NBM} (not NCM)
-\item All six metrics are available (FOB, KG, Statistic, Freight, Insurance, CIF)
+\item Only \strong{FOB and KG} metrics are available (no statistic, freight,
+insurance, or CIF)
 }
 }
 \examples{
@@ -81,15 +68,6 @@ comex_historical(
   start_period = "1995-01",
   end_period = "1996-12",
   details = "country"
-)
-
-# Historical imports with CIF value
-comex_historical(
-  flow = "import",
-  start_period = "1990-01",
-  end_period = "1992-12",
-  details = c("ncm", "country"),
-  metric_cif = TRUE
 )
 }
 
