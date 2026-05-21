@@ -93,6 +93,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Andre Leite \email{leite@castlab.org}
   \item Marcos Wasilew \email{marcos.wasilew@gmail.com}
   \item Hugo Vasconcelos \email{hugo.vasconcelos@ufpe.br}
   \item Carlos Amorin \email{carlos.agaf@ufpe.br}

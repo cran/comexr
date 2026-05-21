@@ -13,7 +13,6 @@ comex_query_city(
   month_detail = TRUE,
   metric_fob = TRUE,
   metric_kg = TRUE,
-  metric_statistic = FALSE,
   language = "en",
   verbose = TRUE
 )
@@ -25,25 +24,24 @@ comex_query_city(
 
 \item{end_period}{End period in \code{"YYYY-MM"} format.}
 
-\item{details}{Character vector of detail/grouping fields. Options:
+\item{details}{Character vector of detail/grouping fields. The city
+endpoint accepts only a subset of the general-endpoint fields:
 
-\strong{Geographic:} \code{"country"}, \code{"state"}, \code{"city"}
+\strong{Geographic:} \code{"country"}, \code{"bloc"} (\code{"economic_block"}), \code{"state"},
+\code{"city"}
 
-\strong{Products:} \code{"hs6"} (or \code{"sh6"}), \code{"hs4"} (or \code{"sh4"}),
-\code{"hs2"} (or \code{"sh2"}), \code{"section"}}
+\strong{Products:} \code{"hs4"} / \code{"sh4"} (API: \code{heading}), \code{"hs2"} / \code{"sh2"}
+(API: \code{chapter}), \code{"section"}}
 
-\item{filters}{Named list of filters.
+\item{filters}{Named list of filters. Accepts the same names as \code{details}.
 Example: \code{list(city = "3550308", state = "26")}}
 
 \item{month_detail}{Logical. If \code{TRUE}, break down by month.
-Default: \code{FALSE}.}
+Default: \code{TRUE}.}
 
 \item{metric_fob}{Logical. Include FOB value (US$). Default: \code{TRUE}.}
 
 \item{metric_kg}{Logical. Include net weight (kg). Default: \code{TRUE}.}
-
-\item{metric_statistic}{Logical. Include statistical quantity.
-Default: \code{FALSE}.}
 
 \item{language}{Response language: \code{"pt"}, \code{"en"}, or \code{"es"}.
 Default: \code{"en"}.}
@@ -63,10 +61,12 @@ producer or buyer.
 \details{
 City-level data differs from general data:
 \itemize{
-\item Full NCM is \strong{not} available (use HS6/SH4/SH2)
+\item Full NCM is \strong{not} available; product detail goes only down to HS4
+(heading). HS6 (subheading) is also \strong{not} available.
 \item Classifications like CGCE, SITC, and ISIC are \strong{not} available
-\item Only FOB, KG, and Statistical quantity metrics are available
-\item Freight, Insurance, and CIF metrics are \strong{not} available
+\item Transport mode (\code{via}) and customs unit (\code{urf}) are \strong{not} available
+\item Only \strong{FOB} and \strong{KG} metrics are supported; statistical quantity,
+freight, insurance, and CIF metrics are \strong{not} available
 }
 }
 \examples{

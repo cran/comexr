@@ -192,7 +192,10 @@ knitr::opts_chunk$set(
 # #>  ...
 
 ## ----isic---------------------------------------------------------------------
-# isic <- comex_isic(language = "en", page = 1, per_page = 5)
+# # ISIC values are only exposed by the API as filter values, not as a
+# # dedicated table. `comex_isic()` calls the matching /general/filters/
+# # endpoint for the requested level.
+# isic <- comex_isic(level = "section", language = "en")
 
 ## ----lookup_workflow----------------------------------------------------------
 # # 1. Find country code for Argentina

@@ -1,3 +1,54 @@
+# comexr 0.3.0
+
+## Breaking Changes
+
+* Many user-friendly detail/filter aliases now map to the correct API
+  names. Previous releases sent names that the ComexStat API rejects
+  with HTTP 400 "Invalid detail item". Behaviour now matches the live
+  API as verified against `/general/details` and `/general/filters`:
+    - `"transport_mode"` → `via` (was `transportMode`)
+    - `"hs6"` / `"sh6"` → `subHeading` (was `sh6`)
+    - `"hs4"` / `"sh4"` → `heading` (was `sh4`)
+    - `"hs2"` / `"sh2"` → `chapter` (was `sh2`)
+    - `"cgce_n1"`/`"cgce_n2"`/`"cgce_n3"` → `BECLevel1`/`2`/`3`
+    - `"sitc_*"` / `"cuci_*"` → `SITCSection`/`SITCDivision`/`SITCGroup`/
+      `SITCSubGroup`/`SITCBasicHeading`
+    - `"isic_*"` → `ISICSection`/`ISICDivision`/`ISICGroup`/`ISICClass`
+* `comex_query_city()`: removed `metric_statistic` parameter. The
+  city endpoint only supports `metricFOB` and `metricKG`.
+* `comex_isic()`: rewritten to query `/general/filters/ISIC*` (the only
+  place the API exposes ISIC values). Now takes a `level` argument
+  (`"section"`, `"division"`, `"group"`, `"class"`) and no longer
+  duplicates `comex_sitc()` output.
+
+## Bug Fixes
+
+* Removed `"company_size"` from documented details — the API does not
+  support a company-size detail/filter.
+
+## Documentation
+
+* `comex_query()`: detail list rewritten to show the user-friendly
+  alias **and** the underlying API name for every option.
+* `comex_query_city()`: corrected — HS6 (subheading) is **not**
+  available for the city endpoint; product detail goes only down to
+  HS4 (heading). Added `bloc`/`economic_block` to documented details.
+* `comex_historical()`: documented the available filter names
+  (`country`, `bloc`, `state`, `nbm`).
+* `comex_filter_values()`: clarified that the `filter` argument is
+  case-sensitive and must match `comex_filters()` output verbatim
+  (e.g. `"BECLevel1"`, `"SITCSection"`, `"ISICSection"`).
+* New vignette `city-profile`: reproduces the panels of the public
+  ComexStat municipality page (`comexstat.mdic.gov.br/{lang}/municipio/`)
+  — totals, top countries, top blocs, top HS4 products, monthly time
+  series, year-over-year — using `comex_query_city()`.
+* New vignette `state-trade-profile`: full state-level extract
+  (Pernambuco example) combining the "By Municipality" panel filters
+  — exports + imports, monthly detail, state filter, details by
+  state / city / HS4 / section / HS2 / country — and showing how to
+  derive trade balance, top municipalities, top products, top
+  partners and year-over-year comparisons from the result.
+
 # comexr 0.2.0
 
 ## Breaking Changes

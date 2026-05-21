@@ -567,10 +567,14 @@ hierarchy: subheading (6-digit), heading (4-digit), and chapter
 </div>
 <div id="isic-international-standard-industrial-classification" class="section level3">
 <h3>ISIC — International Standard Industrial Classification</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>isic <span class="ot">&lt;-</span> <span class="fu">comex_isic</span>(<span class="at">language =</span> <span class="st">&quot;en&quot;</span>, <span class="at">page =</span> <span class="dv">1</span>, <span class="at">per_page =</span> <span class="dv">5</span>)</span></code></pre></div>
-<p><strong>Note:</strong> The ISIC table uses the same endpoint as SITC
-(<code>/tables/product-categories</code>). The API does not currently
-provide a separate ISIC-only table.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># ISIC values are only exposed by the API as filter values, not as a</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># dedicated table. `comex_isic()` calls the matching /general/filters/</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co"># endpoint for the requested level.</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>isic <span class="ot">&lt;-</span> <span class="fu">comex_isic</span>(<span class="at">level =</span> <span class="st">&quot;section&quot;</span>, <span class="at">language =</span> <span class="st">&quot;en&quot;</span>)</span></code></pre></div>
+<p><strong>Note:</strong> The ComexStat API does not expose an ISIC
+table endpoint. <code>comex_isic()</code> instead retrieves ISIC values
+from
+<code>/general/filters/ISICSection|ISICDivision|ISICGroup|ISICClass</code>.</p>
 </div>
 </div>
 <div id="using-table-codes-in-queries" class="section level2">

@@ -2,53 +2,39 @@
 % Please edit documentation in R/tables_classifications.R
 \name{comex_isic}
 \alias{comex_isic}
-\title{Get ISIC (International Standard Industrial Classification) table}
+\title{Get ISIC (International Standard Industrial Classification) values}
 \usage{
 comex_isic(
+  level = c("section", "division", "group", "class"),
   language = "en",
-  search = NULL,
-  add = NULL,
-  page = NULL,
-  per_page = NULL,
   verbose = FALSE
 )
 }
 \arguments{
+\item{level}{Hierarchical level. One of \code{"section"}, \code{"division"},
+\code{"group"}, or \code{"class"}. Default: \code{"section"}.}
+
 \item{language}{Language: \code{"pt"}, \code{"en"}, or \code{"es"}. Default: \code{"en"}.}
-
-\item{search}{Optional search term to filter results.}
-
-\item{add}{Optional related table to include (e.g. \code{"ncm"}).}
-
-\item{page}{Page number for pagination. Default: \code{NULL}.}
-
-\item{per_page}{Number of results per page. Default: \code{NULL}.}
 
 \item{verbose}{Logical. Show progress messages. Default: \code{FALSE}.}
 }
 \value{
-A data.frame with classification codes and descriptions.
+A data.frame with ISIC codes and descriptions for the given level.
 }
 \description{
-Queries the \verb{/tables/product-categories} endpoint to retrieve ISIC
-classification data. ISIC is an international classification of economic
-activities developed by the United Nations.
+Retrieves ISIC classification values at a chosen hierarchical level by
+calling the corresponding \verb{/general/filters/\{filter\}} endpoint, which
+is the only place the ComexStat API exposes ISIC codes (there is no
+\verb{/tables/isic} endpoint).
 }
-\note{
-The OpenAPI specification does not define a dedicated ISIC table endpoint.
-ISIC codes are available as detail/grouping fields in trade queries
-(e.g. \code{"isic_section"}, \code{"isic_division"}). This convenience function
-queries \verb{/tables/product-categories}, which may return ISIC data
-alongside CUCI/SITC classifications. You can also look up ISIC values
-using \code{\link[=comex_filter_values]{comex_filter_values()}} with filter names like \code{"isicSection"}.
+\details{
+ISIC is the international classification of economic activities
+maintained by the United Nations.
 }
 \examples{
 \dontrun{
-# Browse product categories (includes ISIC)
-comex_isic()
-
-# Alternatively, look up ISIC values via filters:
-comex_filter_values("isicSection")
+comex_isic("section")
+comex_isic("division", language = "pt")
 }
 
 }

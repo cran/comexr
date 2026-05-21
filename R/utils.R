@@ -351,53 +351,68 @@ convert_flow <- function(flow) {
 # Name mappings (user-friendly -> API names)
 # -------------------------------------------------------------------------
 
+#' API filter/detail names verified against the live endpoints
+#' (/general/filters, /general/details, /cities/filters,
+#' /historical-data/filters) on 2026-05-21.
 #' @noRd
 .details_map <- c(
   # Geographic
   country        = "country",
   bloc           = "economicBlock",
   economic_block = "economicBlock",
+  economicBlock  = "economicBlock",
   state          = "state",
   city           = "city",
-  transport_mode = "transportMode",
+  transport_mode = "via",
+  via            = "via",
   customs_unit   = "urf",
-  # Products - NCM / HS (general)
+  urf            = "urf",
+  # Products - NCM and Harmonized System (HS2/HS4/HS6)
   ncm            = "ncm",
-  hs6            = "sh6",
-  sh6            = "sh6",
-  hs4            = "sh4",
-  sh4            = "sh4",
-  hs2            = "sh2",
-  sh2            = "sh2",
-  section        = "section",
-  # Products - city endpoint names
+  hs6            = "subHeading",
+  sh6            = "subHeading",
+  subheading     = "subHeading",
+  subHeading     = "subHeading",
+  hs4            = "heading",
+  sh4            = "heading",
   heading        = "heading",
+  hs2            = "chapter",
+  sh2            = "chapter",
   chapter        = "chapter",
-  # CGCE
-  cgce_n1        = "cgceN1",
-  cgce_n2        = "cgceN2",
-  cgce_n3        = "cgceN3",
-  # CUCI / SITC
-  sitc_section      = "cuciSection",
-  sitc_chapter      = "cuciChapter",
-  sitc_position     = "cuciPosition",
-
-  sitc_subposition  = "cuciSubposition",
-  sitc_item         = "cuciItem",
-  cuci_section      = "cuciSection",
-  cuci_chapter      = "cuciChapter",
-  cuci_position     = "cuciPosition",
-  cuci_subposition  = "cuciSubposition",
-  cuci_item         = "cuciItem",
+  section        = "section",
+  # CGCE (a.k.a. BEC - Broad Economic Categories)
+  cgce_n1        = "BECLevel1",
+  cgce_n2        = "BECLevel2",
+  cgce_n3        = "BECLevel3",
+  BECLevel1      = "BECLevel1",
+  BECLevel2      = "BECLevel2",
+  BECLevel3      = "BECLevel3",
+  # SITC / CUCI
+  sitc_section      = "SITCSection",
+  sitc_division     = "SITCDivision",
+  sitc_chapter      = "SITCDivision",
+  sitc_group        = "SITCGroup",
+  sitc_position     = "SITCGroup",
+  sitc_subgroup     = "SITCSubGroup",
+  sitc_subposition  = "SITCSubGroup",
+  sitc_basic_heading = "SITCBasicHeading",
+  sitc_item         = "SITCBasicHeading",
+  SITCSection       = "SITCSection",
+  SITCDivision      = "SITCDivision",
+  SITCGroup         = "SITCGroup",
+  SITCSubGroup      = "SITCSubGroup",
+  SITCBasicHeading  = "SITCBasicHeading",
   # ISIC
-  isic_section   = "isicSection",
-  isic_division  = "isicDivision",
-  isic_group     = "isicGroup",
-  isic_class     = "isicClass",
+  isic_section   = "ISICSection",
+  isic_division  = "ISICDivision",
+  isic_group     = "ISICGroup",
+  isic_class     = "ISICClass",
+  ISICSection    = "ISICSection",
+  ISICDivision   = "ISICDivision",
+  ISICGroup      = "ISICGroup",
+  ISICClass      = "ISICClass",
   # NBM (historical)
-  nbm            = "nbm",
-  # Other
-  company_size   = "companySize"
+  nbm            = "nbm"
 )
 
 #' Convert user-friendly name to API name

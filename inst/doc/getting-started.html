@@ -455,6 +455,11 @@ look them up.</p>
 <p>The <code>details</code> parameter accepts user-friendly names that
 are mapped to the API’s internal names. Here is the full list:</p>
 <table>
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>User name</th>
@@ -465,90 +470,93 @@ are mapped to the API’s internal names. Here is the full list:</p>
 <tbody>
 <tr class="odd">
 <td><code>country</code></td>
-<td>country</td>
+<td><code>country</code></td>
 <td>general, city, historical</td>
 </tr>
 <tr class="even">
 <td><code>bloc</code> / <code>economic_block</code></td>
-<td>economicBlock</td>
-<td>general, city</td>
+<td><code>economicBlock</code></td>
+<td>general, city, historical</td>
 </tr>
 <tr class="odd">
 <td><code>state</code></td>
-<td>state</td>
-<td>general, city</td>
+<td><code>state</code></td>
+<td>general, city, historical</td>
 </tr>
 <tr class="even">
 <td><code>city</code></td>
-<td>city</td>
+<td><code>city</code></td>
 <td>city</td>
 </tr>
 <tr class="odd">
 <td><code>transport_mode</code></td>
-<td>transportMode</td>
+<td><code>via</code></td>
 <td>general</td>
 </tr>
 <tr class="even">
 <td><code>customs_unit</code></td>
-<td>urf</td>
+<td><code>urf</code></td>
 <td>general</td>
 </tr>
 <tr class="odd">
 <td><code>ncm</code></td>
-<td>ncm</td>
+<td><code>ncm</code></td>
 <td>general</td>
 </tr>
 <tr class="even">
 <td><code>hs6</code> / <code>sh6</code></td>
-<td>sh6</td>
+<td><code>subHeading</code></td>
 <td>general</td>
 </tr>
 <tr class="odd">
 <td><code>hs4</code> / <code>sh4</code></td>
-<td>sh4</td>
-<td>general</td>
+<td><code>heading</code></td>
+<td>general, city</td>
 </tr>
 <tr class="even">
 <td><code>hs2</code> / <code>sh2</code></td>
-<td>sh2</td>
-<td>general</td>
+<td><code>chapter</code></td>
+<td>general, city</td>
 </tr>
 <tr class="odd">
 <td><code>section</code></td>
-<td>section</td>
+<td><code>section</code></td>
 <td>general, city</td>
 </tr>
 <tr class="even">
 <td><code>cgce_n1</code> / <code>cgce_n2</code> /
 <code>cgce_n3</code></td>
-<td>cgceN1/N2/N3</td>
+<td><code>BECLevel1</code> / <code>BECLevel2</code> /
+<code>BECLevel3</code></td>
 <td>general</td>
 </tr>
 <tr class="odd">
-<td><code>sitc_section</code> … <code>sitc_item</code></td>
-<td>cuciSection…cuciItem</td>
+<td><code>sitc_section</code> / <code>sitc_division</code> /
+<code>sitc_group</code> / <code>sitc_subgroup</code> /
+<code>sitc_basic_heading</code></td>
+<td><code>SITCSection</code> / <code>SITCDivision</code> /
+<code>SITCGroup</code> / <code>SITCSubGroup</code> /
+<code>SITCBasicHeading</code></td>
 <td>general</td>
 </tr>
 <tr class="even">
-<td><code>isic_section</code> … <code>isic_class</code></td>
-<td>isicSection…isicClass</td>
+<td><code>isic_section</code> / <code>isic_division</code> /
+<code>isic_group</code> / <code>isic_class</code></td>
+<td><code>ISICSection</code> / <code>ISICDivision</code> /
+<code>ISICGroup</code> / <code>ISICClass</code></td>
 <td>general</td>
 </tr>
 <tr class="odd">
 <td><code>nbm</code></td>
-<td>nbm</td>
+<td><code>nbm</code></td>
 <td>historical</td>
-</tr>
-<tr class="even">
-<td><code>company_size</code></td>
-<td>companySize</td>
-<td>general</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Note:</strong> City endpoint uses <code>heading</code>
-(≈HS4), <code>chapter</code> (≈HS2), <code>section</code> — not
-sh2/sh4/sh6. Use <code>comex_details(&quot;city&quot;)</code> to confirm.</p>
+(≈HS4), <code>chapter</code> (≈HS2), <code>section</code> — HS6
+(subHeading) is <strong>not</strong> available for cities. Use
+<code>comex_details(&quot;city&quot;)</code> to confirm.</p>
 </div>
 <div id="language-support" class="section level2">
 <h2>Language support</h2>

@@ -586,12 +586,17 @@ timeout. Add filters or reduce the date range.</p></li>
 <code>comex_countries()</code>, <code>comex_states()</code>,
 <code>comex_filter_values()</code> to find the numeric codes.</p></li>
 <li><p><strong>The <code>details</code> parameter accepts user-friendly
-names.</strong> Write <code>&quot;hs4&quot;</code> instead of <code>&quot;sh4&quot;</code>,
-<code>&quot;transport_mode&quot;</code> instead of <code>&quot;transportMode&quot;</code>.
-The package maps them automatically.</p></li>
+names.</strong> Write <code>&quot;hs4&quot;</code> (maps to API
+<code>heading</code>), <code>&quot;transport_mode&quot;</code> (maps to API
+<code>via</code>), <code>&quot;cgce_n1&quot;</code> (maps to API
+<code>BECLevel1</code>), <code>&quot;sitc_section&quot;</code> (maps to API
+<code>SITCSection</code>), <code>&quot;isic_section&quot;</code> (maps to API
+<code>ISICSection</code>). The package handles the translation
+automatically.</p></li>
 <li><p><strong>City endpoint has fewer features.</strong> Only 7
-details, 2 metrics, and different product grouping names
-(heading/chapter/section).</p></li>
+details, 2 metrics (FOB and KG), no transport mode or customs unit, and
+product grouping stops at HS4
+(<code>heading</code>/<code>chapter</code>/<code>section</code>).</p></li>
 <li><p><strong>Historical endpoint uses NBM.</strong> The
 <code>&quot;ncm&quot;</code> detail is not available — use <code>&quot;nbm&quot;</code>
 instead.</p></li>

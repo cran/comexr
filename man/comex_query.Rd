@@ -28,23 +28,28 @@ comex_query(
 
 \item{end_period}{End period in \code{"YYYY-MM"} format (e.g. \code{"2023-12"}).}
 
-\item{details}{Character vector of detail/grouping fields. Options:
+\item{details}{Character vector of detail/grouping fields. The names below
+are user-friendly aliases; the package translates each to the underlying
+API name. The API names returned by \code{comex_details("general")} are also
+accepted verbatim. Available options:
 
-\strong{Geographic:} \code{"country"}, \code{"bloc"}, \code{"state"}, \code{"city"},
-\code{"transport_mode"}, \code{"customs_unit"}
+\strong{Geographic:} \code{"country"}, \code{"bloc"} (\code{"economic_block"}), \code{"state"},
+\code{"transport_mode"} (API: \code{via}), \code{"customs_unit"} (API: \code{urf})
 
-\strong{Products:} \code{"ncm"}, \code{"hs6"} (or \code{"sh6"}), \code{"hs4"} (or \code{"sh4"}),
-\code{"hs2"} (or \code{"sh2"}), \code{"section"}
+\strong{Products:} \code{"ncm"}, \code{"hs6"} / \code{"sh6"} (API: \code{subHeading}),
+\code{"hs4"} / \code{"sh4"} (API: \code{heading}), \code{"hs2"} / \code{"sh2"} (API: \code{chapter}),
+\code{"section"}
 
-\strong{CGCE:} \code{"cgce_n1"}, \code{"cgce_n2"}, \code{"cgce_n3"}
+\strong{CGCE (BEC):} \code{"cgce_n1"}, \code{"cgce_n2"}, \code{"cgce_n3"} (API:
+\code{BECLevel1}, \code{BECLevel2}, \code{BECLevel3})
 
-\strong{SITC/CUCI:} \code{"sitc_section"}, \code{"sitc_chapter"}, \code{"sitc_position"},
-\code{"sitc_subposition"}, \code{"sitc_item"}
+\strong{SITC/CUCI:} \code{"sitc_section"}, \code{"sitc_division"}, \code{"sitc_group"},
+\code{"sitc_subgroup"}, \code{"sitc_basic_heading"} (API: \code{SITCSection},
+\code{SITCDivision}, \code{SITCGroup}, \code{SITCSubGroup}, \code{SITCBasicHeading})
 
 \strong{ISIC:} \code{"isic_section"}, \code{"isic_division"}, \code{"isic_group"},
-\code{"isic_class"}
-
-\strong{Other:} \code{"company_size"} (imports only)}
+\code{"isic_class"} (API: \code{ISICSection}, \code{ISICDivision}, \code{ISICGroup},
+\code{ISICClass})}
 
 \item{filters}{Named list of filters. Names should match detail field names.
 Example: \code{list(country = c(160, 249), state = c(26, 13))}}

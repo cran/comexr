@@ -88,10 +88,15 @@ comex_filters <- function(type = "general", language = "en", verbose = FALSE) {
 
 #' Get values for a specific filter
 #'
-#' Returns the possible values for a given filter name.
+#' Returns the possible values for a given filter name. The `filter`
+#' argument is passed verbatim to the API and is case-sensitive — use
+#' the exact name returned by [comex_filters()] (for example
+#' `"economicBlock"`, `"BECLevel1"`, `"SITCSection"`, `"ISICSection"`,
+#' `"subHeading"`, `"heading"`, `"chapter"`).
 #'
 #' @param filter Filter name as returned by [comex_filters()]
-#'   (e.g. `"country"`, `"state"`, `"ncm"`, `"economicBlock"`).
+#'   (e.g. `"country"`, `"state"`, `"ncm"`, `"economicBlock"`,
+#'   `"BECLevel1"`, `"SITCSection"`, `"ISICSection"`).
 #' @param type Data type: `"general"`, `"city"`, or `"historical"`.
 #' @param language Language: `"pt"`, `"en"`, or `"es"`. Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `FALSE`.
@@ -102,6 +107,8 @@ comex_filters <- function(type = "general", language = "en", verbose = FALSE) {
 #' comex_filter_values("country")
 #' comex_filter_values("state", type = "city")
 #' comex_filter_values("economicBlock")
+#' comex_filter_values("BECLevel1")
+#' comex_filter_values("ISICSection")
 #' }
 #'
 #' @export

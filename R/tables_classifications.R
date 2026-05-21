@@ -77,44 +77,38 @@ comex_sitc <- function(language = "en", search = NULL, add = NULL,
 
 # ---- ISIC - International Standard Industrial Classification ------------
 
-#' Get ISIC (International Standard Industrial Classification) table
+#' Get ISIC (International Standard Industrial Classification) values
 #'
-#' Queries the `/tables/product-categories` endpoint to retrieve ISIC
-#' classification data. ISIC is an international classification of economic
-#' activities developed by the United Nations.
+#' Retrieves ISIC classification values at a chosen hierarchical level by
+#' calling the corresponding `/general/filters/{filter}` endpoint, which
+#' is the only place the ComexStat API exposes ISIC codes (there is no
+#' `/tables/isic` endpoint).
 #'
-#' @note
-#' The OpenAPI specification does not define a dedicated ISIC table endpoint.
-#' ISIC codes are available as detail/grouping fields in trade queries
-#' (e.g. `"isic_section"`, `"isic_division"`). This convenience function
-#' queries `/tables/product-categories`, which may return ISIC data
-#' alongside CUCI/SITC classifications. You can also look up ISIC values
-#' using [comex_filter_values()] with filter names like `"isicSection"`.
+#' ISIC is the international classification of economic activities
+#' maintained by the United Nations.
 #'
+#' @param level Hierarchical level. One of `"section"`, `"division"`,
+#'   `"group"`, or `"class"`. Default: `"section"`.
 #' @param language Language: `"pt"`, `"en"`, or `"es"`. Default: `"en"`.
-#' @param search Optional search term to filter results.
-#' @param add Optional related table to include (e.g. `"ncm"`).
-#' @param page Page number for pagination. Default: `NULL`.
-#' @param per_page Number of results per page. Default: `NULL`.
 #' @param verbose Logical. Show progress messages. Default: `FALSE`.
-#' @return A data.frame with classification codes and descriptions.
+#' @return A data.frame with ISIC codes and descriptions for the given level.
 #'
 #' @examples
 #' \dontrun{
-#' # Browse product categories (includes ISIC)
-#' comex_isic()
-#'
-#' # Alternatively, look up ISIC values via filters:
-#' comex_filter_values("isicSection")
+#' comex_isic("section")
+#' comex_isic("division", language = "pt")
 #' }
 #'
 #' @export
-comex_isic <- function(language = "en", search = NULL, add = NULL,
-                       page = NULL, per_page = NULL, verbose = FALSE) {
-  data <- comex_get("/tables/product-categories",
-                    query = list(language = language, search = search,
-                                 add = add, page = page,
-                                 perPage = per_page),
-                    verbose = verbose)
-  response_to_df(data)
+comex_isic <- function(level = c("section", "division", "group", "class"),
+                       language = "en", verbose = FALSE) {
+  level <- match.arg(level)
+  filter <- switch(level,
+    section  = "ISICSection",
+    division = "ISICDivision",
+    group    = "ISICGroup",
+    class    = "ISICClass"
+  )
+  comex_filter_values(filter, type = "general",
+                      language = language, verbose = verbose)
 }

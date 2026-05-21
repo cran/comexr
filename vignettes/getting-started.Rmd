@@ -141,25 +141,25 @@ the API's internal names. Here is the full list:
 
 | User name | API name | Available in |
 |---|---|---|
-| `country` | country | general, city, historical |
-| `bloc` / `economic_block` | economicBlock | general, city |
-| `state` | state | general, city |
-| `city` | city | city |
-| `transport_mode` | transportMode | general |
-| `customs_unit` | urf | general |
-| `ncm` | ncm | general |
-| `hs6` / `sh6` | sh6 | general |
-| `hs4` / `sh4` | sh4 | general |
-| `hs2` / `sh2` | sh2 | general |
-| `section` | section | general, city |
-| `cgce_n1` / `cgce_n2` / `cgce_n3` | cgceN1/N2/N3 | general |
-| `sitc_section` ... `sitc_item` | cuciSection...cuciItem | general |
-| `isic_section` ... `isic_class` | isicSection...isicClass | general |
-| `nbm` | nbm | historical |
-| `company_size` | companySize | general |
+| `country` | `country` | general, city, historical |
+| `bloc` / `economic_block` | `economicBlock` | general, city, historical |
+| `state` | `state` | general, city, historical |
+| `city` | `city` | city |
+| `transport_mode` | `via` | general |
+| `customs_unit` | `urf` | general |
+| `ncm` | `ncm` | general |
+| `hs6` / `sh6` | `subHeading` | general |
+| `hs4` / `sh4` | `heading` | general, city |
+| `hs2` / `sh2` | `chapter` | general, city |
+| `section` | `section` | general, city |
+| `cgce_n1` / `cgce_n2` / `cgce_n3` | `BECLevel1` / `BECLevel2` / `BECLevel3` | general |
+| `sitc_section` / `sitc_division` / `sitc_group` / `sitc_subgroup` / `sitc_basic_heading` | `SITCSection` / `SITCDivision` / `SITCGroup` / `SITCSubGroup` / `SITCBasicHeading` | general |
+| `isic_section` / `isic_division` / `isic_group` / `isic_class` | `ISICSection` / `ISICDivision` / `ISICGroup` / `ISICClass` | general |
+| `nbm` | `nbm` | historical |
 
 **Note:** City endpoint uses `heading` (≈HS4), `chapter` (≈HS2),
-`section` — not sh2/sh4/sh6. Use `comex_details("city")` to confirm.
+`section` — HS6 (subHeading) is **not** available for cities. Use
+`comex_details("city")` to confirm.
 
 ## Language support
 

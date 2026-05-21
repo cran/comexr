@@ -24,10 +24,12 @@ comex_historical(
 
 \item{end_period}{End period in \code{"YYYY-MM"} format (e.g. \code{"1996-12"}).}
 
-\item{details}{Character vector of detail/grouping fields. Options:
-\code{"country"}, \code{"state"}, \code{"nbm"}.}
+\item{details}{Character vector of detail/grouping fields. The historical
+endpoint supports only: \code{"country"}, \code{"bloc"} (\code{"economic_block"}),
+\code{"state"}, \code{"nbm"}.}
 
-\item{filters}{Named list of filters.}
+\item{filters}{Named list of filters. Accepts the same names as \code{details}
+(\code{"country"}, \code{"bloc"}, \code{"state"}, \code{"nbm"}).}
 
 \item{month_detail}{Logical. If \code{TRUE}, break down by month.
 Default: \code{TRUE}.}

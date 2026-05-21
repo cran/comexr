@@ -46,6 +46,7 @@ imports <- comex_import(
 )
 
 # Filter: exports to China (160), grouped by HS4
+# (the package translates "hs4" to the API's `heading`)
 soy <- comex_export(
   start_period = "2024-01",
   end_period = "2024-12",

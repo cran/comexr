@@ -272,11 +272,14 @@ china_monthly <- comex_export(
    `comex_states()`, `comex_filter_values()` to find the numeric codes.
 
 4. **The `details` parameter accepts user-friendly names.** Write
-   `"hs4"` instead of `"sh4"`, `"transport_mode"` instead of
-   `"transportMode"`. The package maps them automatically.
+   `"hs4"` (maps to API `heading`), `"transport_mode"` (maps to API
+   `via`), `"cgce_n1"` (maps to API `BECLevel1`), `"sitc_section"`
+   (maps to API `SITCSection`), `"isic_section"` (maps to API
+   `ISICSection`). The package handles the translation automatically.
 
-5. **City endpoint has fewer features.** Only 7 details, 2 metrics,
-   and different product grouping names (heading/chapter/section).
+5. **City endpoint has fewer features.** Only 7 details, 2 metrics
+   (FOB and KG), no transport mode or customs unit, and product
+   grouping stops at HS4 (`heading`/`chapter`/`section`).
 
 6. **Historical endpoint uses NBM.** The `"ncm"` detail is not
    available — use `"nbm"` instead.

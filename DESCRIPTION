@@ -1,8 +1,8 @@
 Package: comexr
 Title: Client for the Brazilian Foreign Trade Statistics API
         ('ComexStat')
-Version: 0.2.1
-Date: 2026-03-10
+Version: 0.3.0
+Date: 2026-05-21
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
     person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
@@ -26,15 +26,15 @@ URL: https://strategicprojects.github.io/comexr/,
         https://github.com/StrategicProjects/comexr
 BugReports: https://github.com/StrategicProjects/comexr/issues
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 Depends: R (>= 4.1.0)
 Imports: httr2 (>= 1.0.0), cli (>= 3.6.0)
 Suggests: testthat (>= 3.0.0), knitr, rmarkdown, tibble
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Language: en-US
+Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2026-03-10 18:53:47 UTC; leite
+Packaged: 2026-05-21 15:01:21 UTC; leite
 Author: Andre Leite [aut, cre],
   Marcos Wasilew [aut],
   Hugo Vasconcelos [aut],
@@ -42,4 +42,4 @@ Author: Andre Leite [aut, cre],
   Diogo Bezerra [aut]
 Maintainer: Andre Leite <leite@castlab.org>
 Repository: CRAN
-Date/Publication: 2026-03-17 14:40:03 UTC
+Date/Publication: 2026-05-21 15:10:02 UTC

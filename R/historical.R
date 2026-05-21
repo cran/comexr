@@ -13,9 +13,11 @@
 #' @param flow Trade flow: `"export"` or `"import"`.
 #' @param start_period Start period in `"YYYY-MM"` format (e.g. `"1990-01"`).
 #' @param end_period End period in `"YYYY-MM"` format (e.g. `"1996-12"`).
-#' @param details Character vector of detail/grouping fields. Options:
-#'   `"country"`, `"state"`, `"nbm"`.
-#' @param filters Named list of filters.
+#' @param details Character vector of detail/grouping fields. The historical
+#'   endpoint supports only: `"country"`, `"bloc"` (`"economic_block"`),
+#'   `"state"`, `"nbm"`.
+#' @param filters Named list of filters. Accepts the same names as `details`
+#'   (`"country"`, `"bloc"`, `"state"`, `"nbm"`).
 #' @param month_detail Logical. If `TRUE`, break down by month.
 #'   Default: `TRUE`.
 #' @param metric_fob Logical. Include FOB value (US$). Default: `TRUE`.

@@ -270,12 +270,15 @@ Subgroup → Basic Heading.
 ### ISIC — International Standard Industrial Classification
 
 ```{r isic}
-isic <- comex_isic(language = "en", page = 1, per_page = 5)
+# ISIC values are only exposed by the API as filter values, not as a
+# dedicated table. `comex_isic()` calls the matching /general/filters/
+# endpoint for the requested level.
+isic <- comex_isic(level = "section", language = "en")
 ```
 
-**Note:** The ISIC table uses the same endpoint as SITC
-(`/tables/product-categories`). The API does not currently provide a
-separate ISIC-only table.
+**Note:** The ComexStat API does not expose an ISIC table endpoint.
+`comex_isic()` instead retrieves ISIC values from
+`/general/filters/ISICSection|ISICDivision|ISICGroup|ISICClass`.
 
 ## Using table codes in queries
 

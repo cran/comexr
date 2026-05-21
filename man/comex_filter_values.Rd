@@ -8,7 +8,8 @@ comex_filter_values(filter, type = "general", language = "en", verbose = FALSE)
 }
 \arguments{
 \item{filter}{Filter name as returned by \code{\link[=comex_filters]{comex_filters()}}
-(e.g. \code{"country"}, \code{"state"}, \code{"ncm"}, \code{"economicBlock"}).}
+(e.g. \code{"country"}, \code{"state"}, \code{"ncm"}, \code{"economicBlock"},
+\code{"BECLevel1"}, \code{"SITCSection"}, \code{"ISICSection"}).}
 
 \item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.}
 
@@ -20,13 +21,19 @@ comex_filter_values(filter, type = "general", language = "en", verbose = FALSE)
 A data.frame with filter values.
 }
 \description{
-Returns the possible values for a given filter name.
+Returns the possible values for a given filter name. The \code{filter}
+argument is passed verbatim to the API and is case-sensitive — use
+the exact name returned by \code{\link[=comex_filters]{comex_filters()}} (for example
+\code{"economicBlock"}, \code{"BECLevel1"}, \code{"SITCSection"}, \code{"ISICSection"},
+\code{"subHeading"}, \code{"heading"}, \code{"chapter"}).
 }
 \examples{
 \dontrun{
 comex_filter_values("country")
 comex_filter_values("state", type = "city")
 comex_filter_values("economicBlock")
+comex_filter_values("BECLevel1")
+comex_filter_values("ISICSection")
 }
 
 }

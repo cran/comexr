@@ -1,0 +1,263 @@
+---
+title: "Full state trade profile (Pernambuco example)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Full state trade profile (Pernambuco example)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>",
+  eval     = FALSE
+)
+```
+
+This vignette reproduces a complete state-level trade extract similar
+to the one offered by the ComexStat web app, with the following
+combination requested in the "By Municipality" panel:
+
+* **Flow** — exports **and** imports
+* **Period** — 2026 (January to current month), with monthly detail
+* **Filter** — state of the declarant = **Pernambuco**
+* **Detail** — state, city, HS4 (heading), section, HS2 (chapter), country
+* **Metrics** — FOB (US$) and net weight (kg)
+
+> **City-level data refers to the declarant's tax residence**, not the
+> place where the goods were produced or purchased. The city endpoint
+> only goes down to HS4 (heading) — full NCM and HS6 (subHeading) are
+> not available for this view.
+
+```{r load}
+library(comexr)
+```
+
+## 1. Look up the state code
+
+Brazilian state codes follow the IBGE convention (`26` = Pernambuco).
+If you don't remember the code, query the table:
+
+```{r states}
+states <- comex_states()
+states[states$uf == "PE", ]
+#>      text id uf
+#>  Pernambuco 26 PE
+```
+
+## 2. Build the query parameters
+
+```{r params}
+state_code <- 26                       # Pernambuco
+period_from <- "2026-01"
+period_to   <- "2026-12"               # API returns up to the latest update
+
+# These names are user-friendly aliases. The package translates each
+# to the underlying API name (see `getting-started` vignette for the
+# full mapping table):
+#   hs4     -> heading
+#   hs2     -> chapter
+detalhes <- c("state", "city", "hs4", "section", "hs2", "country")
+
+filtros <- list(state = state_code)
+```
+
+## 3. Fetch exports and imports
+
+The API serves one flow per request, so we make two calls and combine
+the results:
+
+```{r fetch}
+exp_pe <- comex_query_city(
+  flow         = "export",
+  start_period = period_from,
+  end_period   = period_to,
+  details      = detalhes,
+  filters      = filtros,
+  month_detail = TRUE,
+  metric_fob   = TRUE,
+  metric_kg    = TRUE
+)
+exp_pe$flow <- "export"
+
+imp_pe <- comex_query_city(
+  flow         = "import",
+  start_period = period_from,
+  end_period   = period_to,
+  details      = detalhes,
+  filters      = filtros,
+  month_detail = TRUE,
+  metric_fob   = TRUE,
+  metric_kg    = TRUE
+)
+imp_pe$flow <- "import"
+
+pe <- rbind(exp_pe, imp_pe)
+```
+
+The resulting data frame has one row per
+**month × city × HS4 × country × flow** combination:
+
+```{r preview}
+str(pe)
+head(pe)
+```
+
+## 4. Cast metrics and add a date column
+
+API responses come back as character. Convert metrics to numeric and
+build a proper `Date` column for time-series analysis:
+
+```{r cast}
+pe$metricFOB <- as.numeric(pe$metricFOB)
+pe$metricKG  <- as.numeric(pe$metricKG)
+pe$date      <- as.Date(sprintf("%s-%s-01", pe$year, pe$monthNumber))
+```
+
+## 5. Monthly trade balance
+
+```{r monthly}
+monthly <- aggregate(metricFOB ~ date + flow, data = pe, FUN = sum)
+monthly_wide <- reshape(monthly, idvar = "date", timevar = "flow",
+                        direction = "wide")
+names(monthly_wide) <- c("date", "exports", "imports")
+monthly_wide$balance <- monthly_wide$exports - monthly_wide$imports
+monthly_wide
+
+# Base-R plot
+with(monthly_wide, {
+  plot(date, exports / 1e6, type = "b", pch = 19, col = "steelblue",
+       ylim = range(c(exports, imports), na.rm = TRUE) / 1e6,
+       xlab = "Month", ylab = "US$ millions",
+       main = "Pernambuco: exports vs imports, 2026")
+  lines(date, imports / 1e6, type = "b", pch = 17, col = "tomato")
+  legend("topleft", legend = c("Exports", "Imports"),
+         col = c("steelblue", "tomato"), pch = c(19, 17), bty = "n")
+})
+```
+
+## 6. Top municipalities by flow
+
+The package returns the city as `noMunMinsgUf` (e.g. "Goiana - PE"):
+
+```{r top-cities}
+exports_by_city <- aggregate(metricFOB ~ noMunMinsgUf,
+                             data = subset(pe, flow == "export"),
+                             FUN = sum)
+head(exports_by_city[order(-exports_by_city$metricFOB), ], 10)
+
+imports_by_city <- aggregate(metricFOB ~ noMunMinsgUf,
+                             data = subset(pe, flow == "import"),
+                             FUN = sum)
+head(imports_by_city[order(-imports_by_city$metricFOB), ], 10)
+```
+
+## 7. Top products (HS4)
+
+```{r top-hs4}
+exp_hs4 <- aggregate(
+  metricFOB ~ headingCode + heading,
+  data = subset(pe, flow == "export"),
+  FUN  = sum
+)
+head(exp_hs4[order(-exp_hs4$metricFOB), ], 10)
+
+imp_hs4 <- aggregate(
+  metricFOB ~ headingCode + heading,
+  data = subset(pe, flow == "import"),
+  FUN  = sum
+)
+head(imp_hs4[order(-imp_hs4$metricFOB), ], 10)
+```
+
+## 8. Top trading partners (countries)
+
+```{r top-partners}
+exp_country <- aggregate(metricFOB ~ country,
+                         data = subset(pe, flow == "export"),
+                         FUN  = sum)
+head(exp_country[order(-exp_country$metricFOB), ], 10)
+
+imp_country <- aggregate(metricFOB ~ country,
+                         data = subset(pe, flow == "import"),
+                         FUN  = sum)
+head(imp_country[order(-imp_country$metricFOB), ], 10)
+```
+
+## 9. Cross-cuts (country × product, city × product)
+
+Because `pe` already contains the full set of details, any deeper
+cut is just a matter of `aggregate()`:
+
+```{r cross-cuts}
+# Top product for each top destination
+exp_country_hs4 <- aggregate(
+  metricFOB ~ country + heading,
+  data = subset(pe, flow == "export"),
+  FUN  = sum
+)
+exp_country_hs4 <- exp_country_hs4[
+  order(exp_country_hs4$country, -exp_country_hs4$metricFOB),
+]
+do.call(rbind, lapply(
+  split(exp_country_hs4, exp_country_hs4$country),
+  function(x) head(x, 1)
+))
+
+# Top destination for each Pernambuco municipality
+exp_city_country <- aggregate(
+  metricFOB ~ noMunMinsgUf + country,
+  data = subset(pe, flow == "export"),
+  FUN  = sum
+)
+exp_city_country <- exp_city_country[
+  order(exp_city_country$noMunMinsgUf, -exp_city_country$metricFOB),
+]
+do.call(rbind, lapply(
+  split(exp_city_country, exp_city_country$noMunMinsgUf),
+  function(x) head(x, 1)
+))
+```
+
+## 10. Year-over-year comparison
+
+To compare with previous years, just widen the date range and drop
+`month_detail`:
+
+```{r yearly}
+yearly_exp <- comex_query_city(
+  flow         = "export",
+  start_period = "2019-01",
+  end_period   = "2026-12",
+  details      = "state",
+  filters      = list(state = state_code),
+  month_detail = FALSE
+)
+yearly_imp <- comex_query_city(
+  flow         = "import",
+  start_period = "2019-01",
+  end_period   = "2026-12",
+  details      = "state",
+  filters      = list(state = state_code),
+  month_detail = FALSE
+)
+yearly_exp$flow <- "export"; yearly_imp$flow <- "import"
+yearly <- rbind(yearly_exp, yearly_imp)
+yearly$metricFOB <- as.numeric(yearly$metricFOB)
+yearly  # one row per year × flow
+```
+
+## 11. Adapt to any state
+
+The same code works for any Brazilian state — change only
+`state_code` and the date range. To get the code interactively:
+
+```{r adapt}
+comex_filter_values("state", type = "city")
+```
+
+For analyses that require finer product detail (NCM, HS6) or other
+classifications (CGCE, SITC, ISIC), use [`comex_query()`] /
+[`comex_export()`] / [`comex_import()`] on the general endpoint
+— but those do **not** accept a city filter.
