@@ -40,7 +40,7 @@
 #' @param filters Named list of filters. Names should match detail field names.
 #'   Example: `list(country = c(160, 249), state = c(26, 13))`
 #' @param month_detail Logical. If `TRUE`, break down results by month.
-#'   Default: `FALSE`.
+#'   Default: `TRUE`.
 #' @param metric_fob Logical. Include FOB value (US$). Default: `TRUE`.
 #' @param metric_kg Logical. Include net weight (kg). Default: `TRUE`.
 #' @param metric_statistic Logical. Include statistical quantity. Default: `FALSE`.
@@ -55,6 +55,8 @@
 #' @param verbose Logical. Show progress messages. Default: `TRUE`.
 #'
 #' @return A data.frame (or tibble if available) with query results.
+#'   Metric columns (`metricFOB`, `metricKG`, ...) are numeric and
+#'   `year` / `monthNumber` are integer; all other columns are character.
 #'
 #' @examples
 #' \dontrun{
@@ -122,7 +124,7 @@ comex_query <- function(flow = "export",
 
   data <- comex_post("/general", body,
                      query = list(language = language), verbose = verbose)
-  result <- response_to_df(data)
+  result <- convert_query_types(response_to_df(data))
 
   if (verbose && nrow(result) > 0) {
     cli::cli_alert_success("{nrow(result)} records found")

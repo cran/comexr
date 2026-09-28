@@ -4,10 +4,14 @@
 \alias{comex_available_years}
 \title{Get available years for queries}
 \usage{
-comex_available_years(type = "general", verbose = FALSE)
+comex_available_years(
+  type = c("general", "city", "historical"),
+  verbose = FALSE
+)
 }
 \arguments{
-\item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.
+\item{type}{Data type: \code{"general"} (default), \code{"city"}, or
+\code{"historical"}.
 Default: \code{"general"}.}
 
 \item{verbose}{Logical. Show progress messages. Default: \code{FALSE}.}

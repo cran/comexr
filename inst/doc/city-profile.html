@@ -441,8 +441,8 @@ beyond the year:</p>
 <span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>imports_total</span></code></pre></div>
 <p>The trade balance is just
 <code>metricFOB(export) - metricFOB(import)</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>balance <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(exports_total<span class="sc">$</span>metricFOB) <span class="sc">-</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>           <span class="fu">as.numeric</span>(imports_total<span class="sc">$</span>metricFOB)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>balance <span class="ot">&lt;-</span> exports_total<span class="sc">$</span>metricFOB <span class="sc">-</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>           imports_total<span class="sc">$</span>metricFOB</span></code></pre></div>
 </div>
 <div id="top-trading-partners" class="section level2">
 <h2>2. Top trading partners</h2>
@@ -458,7 +458,7 @@ beyond the year:</p>
 <span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>)</span>
 <span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
 <span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>top_export_countries <span class="ot">&lt;-</span> top_export_countries[</span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span><span class="fu">as.numeric</span>(top_export_countries<span class="sc">$</span>metricFOB)),</span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span>top_export_countries<span class="sc">$</span>metricFOB),</span>
 <span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>]</span>
 <span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">head</span>(top_export_countries, <span class="dv">10</span>)</span>
 <span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
@@ -471,7 +471,7 @@ beyond the year:</p>
 <span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  <span class="at">month_detail =</span> <span class="cn">FALSE</span></span>
 <span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>)</span>
 <span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>top_import_countries <span class="ot">&lt;-</span> top_import_countries[</span>
-<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span><span class="fu">as.numeric</span>(top_import_countries<span class="sc">$</span>metricFOB)),</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span>top_import_countries<span class="sc">$</span>metricFOB),</span>
 <span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a>]</span>
 <span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="fu">head</span>(top_import_countries, <span class="dv">10</span>)</span></code></pre></div>
 </div>
@@ -489,7 +489,7 @@ beyond the year:</p>
 <span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>)</span>
 <span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
 <span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>exports_by_bloc <span class="ot">&lt;-</span> exports_by_bloc[</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span><span class="fu">as.numeric</span>(exports_by_bloc<span class="sc">$</span>metricFOB)),</span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span>exports_by_bloc<span class="sc">$</span>metricFOB),</span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>]</span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>exports_by_bloc</span></code></pre></div>
 </div>
@@ -508,7 +508,7 @@ endpoint, and neither is the full 8-digit NCM:</p>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>)</span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>top_export_products <span class="ot">&lt;-</span> top_export_products[</span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span><span class="fu">as.numeric</span>(top_export_products<span class="sc">$</span>metricFOB)),</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">order</span>(<span class="sc">-</span>top_export_products<span class="sc">$</span>metricFOB),</span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>]</span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">head</span>(top_export_products, <span class="dv">10</span>)</span></code></pre></div>
 <p>For a coarser cut, use <code>&quot;hs2&quot;</code> (chapter) or
@@ -538,9 +538,9 @@ time-series chart on the page:</p>
 <p>Plot it with whichever graphics package you prefer:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Example with base R</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>exports_monthly<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%s-%s-01&quot;</span>, exports_monthly<span class="sc">$</span>year, exports_monthly<span class="sc">$</span>monthNumber)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">sprintf</span>(<span class="st">&quot;%d-%02d-01&quot;</span>, exports_monthly<span class="sc">$</span>year, exports_monthly<span class="sc">$</span>monthNumber)</span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>)</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>exports_monthly<span class="sc">$</span>fob_musd <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(exports_monthly<span class="sc">$</span>metricFOB) <span class="sc">/</span> <span class="fl">1e6</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>exports_monthly<span class="sc">$</span>fob_musd <span class="ot">&lt;-</span> exports_monthly<span class="sc">$</span>metricFOB <span class="sc">/</span> <span class="fl">1e6</span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">plot</span>(</span>
 <span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>  exports_monthly<span class="sc">$</span>date, exports_monthly<span class="sc">$</span>fob_musd,</span>

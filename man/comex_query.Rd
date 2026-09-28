@@ -55,7 +55,7 @@ accepted verbatim. Available options:
 Example: \code{list(country = c(160, 249), state = c(26, 13))}}
 
 \item{month_detail}{Logical. If \code{TRUE}, break down results by month.
-Default: \code{FALSE}.}
+Default: \code{TRUE}.}
 
 \item{metric_fob}{Logical. Include FOB value (US$). Default: \code{TRUE}.}
 
@@ -79,6 +79,8 @@ Default: \code{"en"}.}
 }
 \value{
 A data.frame (or tibble if available) with query results.
+Metric columns (\code{metricFOB}, \code{metricKG}, ...) are numeric and
+\code{year} / \code{monthNumber} are integer; all other columns are character.
 }
 \description{
 Query the main ComexStat API endpoint to retrieve Brazilian export and

@@ -106,13 +106,11 @@ head(pe)
 
 ## 4. Cast metrics and add a date column
 
-API responses come back as character. Convert metrics to numeric and
-build a proper `Date` column for time-series analysis:
+Metric columns already come back as numeric and `year`/`monthNumber`
+as integer. Build a proper `Date` column for time-series analysis:
 
 ```{r cast}
-pe$metricFOB <- as.numeric(pe$metricFOB)
-pe$metricKG  <- as.numeric(pe$metricKG)
-pe$date      <- as.Date(sprintf("%s-%s-01", pe$year, pe$monthNumber))
+pe$date <- as.Date(sprintf("%d-%02d-01", pe$year, pe$monthNumber))
 ```
 
 ## 5. Monthly trade balance
@@ -244,7 +242,6 @@ yearly_imp <- comex_query_city(
 )
 yearly_exp$flow <- "export"; yearly_imp$flow <- "import"
 yearly <- rbind(yearly_exp, yearly_imp)
-yearly$metricFOB <- as.numeric(yearly$metricFOB)
 yearly  # one row per year × flow
 ```
 

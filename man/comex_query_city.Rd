@@ -49,7 +49,9 @@ Default: \code{"en"}.}
 \item{verbose}{Logical. Show progress messages. Default: \code{TRUE}.}
 }
 \value{
-A data.frame (or tibble) with query results.
+A data.frame (or tibble if available) with query results.
+Metric columns (\code{metricFOB}, \code{metricKG}, ...) are numeric and
+\code{year} / \code{monthNumber} are integer; all other columns are character.
 }
 \description{
 Query the city endpoint of the ComexStat API. City-level data is more

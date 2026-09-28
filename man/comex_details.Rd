@@ -4,10 +4,15 @@
 \alias{comex_details}
 \title{Get available detail/grouping fields}
 \usage{
-comex_details(type = "general", language = "en", verbose = FALSE)
+comex_details(
+  type = c("general", "city", "historical"),
+  language = "en",
+  verbose = FALSE
+)
 }
 \arguments{
-\item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.}
+\item{type}{Data type: \code{"general"} (default), \code{"city"}, or
+\code{"historical"}.}
 
 \item{language}{Language: \code{"pt"}, \code{"en"}, or \code{"es"}. Default: \code{"en"}.}
 

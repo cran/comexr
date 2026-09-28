@@ -422,11 +422,10 @@ country × flow</strong> combination:</p>
 </div>
 <div id="cast-metrics-and-add-a-date-column" class="section level2">
 <h2>4. Cast metrics and add a date column</h2>
-<p>API responses come back as character. Convert metrics to numeric and
-build a proper <code>Date</code> column for time-series analysis:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>pe<span class="sc">$</span>metricFOB <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(pe<span class="sc">$</span>metricFOB)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>pe<span class="sc">$</span>metricKG  <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(pe<span class="sc">$</span>metricKG)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>pe<span class="sc">$</span>date      <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%s-%s-01&quot;</span>, pe<span class="sc">$</span>year, pe<span class="sc">$</span>monthNumber))</span></code></pre></div>
+<p>Metric columns already come back as numeric and
+<code>year</code>/<code>monthNumber</code> as integer. Build a proper
+<code>Date</code> column for time-series analysis:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>pe<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%d-%02d-01&quot;</span>, pe<span class="sc">$</span>year, pe<span class="sc">$</span>monthNumber))</span></code></pre></div>
 </div>
 <div id="monthly-trade-balance" class="section level2">
 <h2>5. Monthly trade balance</h2>
@@ -544,8 +543,7 @@ deeper cut is just a matter of <code>aggregate()</code>:</p>
 <span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>)</span>
 <span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>yearly_exp<span class="sc">$</span>flow <span class="ot">&lt;-</span> <span class="st">&quot;export&quot;</span>; yearly_imp<span class="sc">$</span>flow <span class="ot">&lt;-</span> <span class="st">&quot;import&quot;</span></span>
 <span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>yearly <span class="ot">&lt;-</span> <span class="fu">rbind</span>(yearly_exp, yearly_imp)</span>
-<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>yearly<span class="sc">$</span>metricFOB <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(yearly<span class="sc">$</span>metricFOB)</span>
-<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>yearly  <span class="co"># one row per year × flow</span></span></code></pre></div>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>yearly  <span class="co"># one row per year × flow</span></span></code></pre></div>
 </div>
 <div id="adapt-to-any-state" class="section level2">
 <h2>11. Adapt to any state</h2>

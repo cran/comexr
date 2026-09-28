@@ -8,7 +8,8 @@
 #'
 #' Returns the date of the last data update in the API.
 #'
-#' @param type Data type: `"general"`, `"city"`, or `"historical"`.
+#' @param type Data type: `"general"` (default), `"city"`, or
+#'   `"historical"`.
 #'   Default: `"general"`.
 #' @param verbose Logical. Show progress messages. Default: `FALSE`.
 #' @return A list with last update information.
@@ -21,12 +22,13 @@
 #' }
 #'
 #' @export
-comex_last_update <- function(type = "general", verbose = FALSE) {
+comex_last_update <- function(type = c("general", "city", "historical"),
+                               verbose = FALSE) {
+  type <- match.arg(type)
   endpoint <- switch(type,
     general    = "/general/dates/updated",
     city       = "/cities/dates/updated",
-    historical = "/historical-data/dates/updated",
-    cli::cli_abort("Invalid type: {type}. Use 'general', 'city', or 'historical'.")
+    historical = "/historical-data/dates/updated"
   )
   data <- comex_get(endpoint, verbose = verbose)
   extract_single(data)
@@ -47,12 +49,13 @@ comex_last_update <- function(type = "general", verbose = FALSE) {
 #' }
 #'
 #' @export
-comex_available_years <- function(type = "general", verbose = FALSE) {
+comex_available_years <- function(type = c("general", "city", "historical"),
+                                   verbose = FALSE) {
+  type <- match.arg(type)
   endpoint <- switch(type,
     general    = "/general/dates/years",
     city       = "/cities/dates/years",
-    historical = "/historical-data/dates/years",
-    cli::cli_abort("Invalid type: {type}. Use 'general', 'city', or 'historical'.")
+    historical = "/historical-data/dates/years"
   )
   data <- comex_get(endpoint, verbose = verbose)
   extract_single(data)
@@ -62,7 +65,8 @@ comex_available_years <- function(type = "general", verbose = FALSE) {
 #'
 #' Returns the list of filter types available for API queries.
 #'
-#' @param type Data type: `"general"`, `"city"`, or `"historical"`.
+#' @param type Data type: `"general"` (default), `"city"`, or
+#'   `"historical"`.
 #' @param language Language: `"pt"`, `"en"`, or `"es"`. Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `FALSE`.
 #' @return A data.frame with available filters.
@@ -75,12 +79,13 @@ comex_available_years <- function(type = "general", verbose = FALSE) {
 #' }
 #'
 #' @export
-comex_filters <- function(type = "general", language = "en", verbose = FALSE) {
+comex_filters <- function(type = c("general", "city", "historical"),
+                           language = "en", verbose = FALSE) {
+  type <- match.arg(type)
   base <- switch(type,
     general    = "/general/filters",
     city       = "/cities/filters",
-    historical = "/historical-data/filters",
-    cli::cli_abort("Invalid type: {type}.")
+    historical = "/historical-data/filters"
   )
   data <- comex_get(base, query = list(language = language), verbose = verbose)
   response_to_df(data)
@@ -97,7 +102,8 @@ comex_filters <- function(type = "general", language = "en", verbose = FALSE) {
 #' @param filter Filter name as returned by [comex_filters()]
 #'   (e.g. `"country"`, `"state"`, `"ncm"`, `"economicBlock"`,
 #'   `"BECLevel1"`, `"SITCSection"`, `"ISICSection"`).
-#' @param type Data type: `"general"`, `"city"`, or `"historical"`.
+#' @param type Data type: `"general"` (default), `"city"`, or
+#'   `"historical"`.
 #' @param language Language: `"pt"`, `"en"`, or `"es"`. Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `FALSE`.
 #' @return A data.frame with filter values.
@@ -113,14 +119,14 @@ comex_filters <- function(type = "general", language = "en", verbose = FALSE) {
 #'
 #' @export
 comex_filter_values <- function(filter,
-                                type = "general",
+                                type = c("general", "city", "historical"),
                                 language = "en",
                                 verbose = FALSE) {
+  type <- match.arg(type)
   base <- switch(type,
     general    = "/general/filters",
     city       = "/cities/filters",
-    historical = "/historical-data/filters",
-    cli::cli_abort("Invalid type: {type}.")
+    historical = "/historical-data/filters"
   )
   endpoint <- paste0(base, "/", filter)
   data <- comex_get(endpoint, query = list(language = language),
@@ -143,12 +149,13 @@ comex_filter_values <- function(filter,
 #' }
 #'
 #' @export
-comex_details <- function(type = "general", language = "en", verbose = FALSE) {
+comex_details <- function(type = c("general", "city", "historical"),
+                           language = "en", verbose = FALSE) {
+  type <- match.arg(type)
   base <- switch(type,
     general    = "/general/details",
     city       = "/cities/details",
-    historical = "/historical-data/details",
-    cli::cli_abort("Invalid type: {type}.")
+    historical = "/historical-data/details"
   )
   data <- comex_get(base, query = list(language = language), verbose = verbose)
   response_to_df(data)
@@ -169,12 +176,13 @@ comex_details <- function(type = "general", language = "en", verbose = FALSE) {
 #' }
 #'
 #' @export
-comex_metrics <- function(type = "general", language = "en", verbose = FALSE) {
+comex_metrics <- function(type = c("general", "city", "historical"),
+                           language = "en", verbose = FALSE) {
+  type <- match.arg(type)
   base <- switch(type,
     general    = "/general/metrics",
     city       = "/cities/metrics",
-    historical = "/historical-data/metrics",
-    cli::cli_abort("Invalid type: {type}.")
+    historical = "/historical-data/metrics"
   )
   data <- comex_get(base, query = list(language = language), verbose = verbose)
   response_to_df(data)

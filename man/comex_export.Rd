@@ -52,7 +52,7 @@ accepted verbatim. Available options:
 Example: \code{list(country = c(160, 249), state = c(26, 13))}}
 
 \item{month_detail}{Logical. If \code{TRUE}, break down results by month.
-Default: \code{FALSE}.}
+Default: \code{TRUE}.}
 
 \item{metric_fob}{Logical. Include FOB value (US$). Default: \code{TRUE}.}
 

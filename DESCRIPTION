@@ -1,13 +1,13 @@
 Package: comexr
 Title: Client for the Brazilian Foreign Trade Statistics API
         ('ComexStat')
-Version: 0.3.0
-Date: 2026-05-21
+Version: 0.4.0
+Date: 2026-09-28
 Authors@R: c(
     person("Andre", "Leite", email = "leite@castlab.org", role = c("aut", "cre")),
     person("Marcos", "Wasilew", email = "marcos.wasilew@gmail.com", role = "aut"),
     person("Hugo", "Vasconcelos", email = "hugo.vasconcelos@ufpe.br", role = "aut"),
-    person("Carlos", "Amorin", email = "carlos.agaf@ufpe.br", role = "aut"),
+    person("Carlos", "Amorim", email = "carlos.agaf@ufpe.br", role = "aut"),
     person("Diogo", "Bezerra", email = "diogo.bezerra@ufpe.br", role = "aut"))
 Description: Interface to the 'ComexStat' API
     <https://comexstat.mdic.gov.br/> from the Brazilian Ministry of
@@ -34,12 +34,12 @@ Config/testthat/edition: 3
 Language: en-US
 Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2026-05-21 15:01:21 UTC; leite
+Packaged: 2026-09-28 19:58:53 UTC; leite
 Author: Andre Leite [aut, cre],
   Marcos Wasilew [aut],
   Hugo Vasconcelos [aut],
-  Carlos Amorin [aut],
+  Carlos Amorim [aut],
   Diogo Bezerra [aut]
 Maintainer: Andre Leite <leite@castlab.org>
 Repository: CRAN
-Date/Publication: 2026-05-21 15:10:02 UTC
+Date/Publication: 2026-09-28 21:20:02 UTC

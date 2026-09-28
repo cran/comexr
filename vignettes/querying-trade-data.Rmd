@@ -22,7 +22,7 @@ different time period and level of geographic detail:
 |---|---|---|---|
 | `comex_query()` | POST /general | 1997–present | National |
 | `comex_query_city()` | POST /cities | 1997–present | Municipal |
-| `comex_historical()` | POST /historical-data/ | 1989–1996 | National |
+| `comex_historical()` | POST /historical-data | 1989–1996 | National |
 
 Convenience wrappers `comex_export()` and `comex_import()` call
 `comex_query()` with the flow pre-set.

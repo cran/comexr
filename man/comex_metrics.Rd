@@ -4,10 +4,15 @@
 \alias{comex_metrics}
 \title{Get available metrics}
 \usage{
-comex_metrics(type = "general", language = "en", verbose = FALSE)
+comex_metrics(
+  type = c("general", "city", "historical"),
+  language = "en",
+  verbose = FALSE
+)
 }
 \arguments{
-\item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.}
+\item{type}{Data type: \code{"general"} (default), \code{"city"}, or
+\code{"historical"}.}
 
 \item{language}{Language: \code{"pt"}, \code{"en"}, or \code{"es"}. Default: \code{"en"}.}
 

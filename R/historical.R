@@ -1,5 +1,5 @@
 # =========================================================================
-# Historical foreign trade data queries (POST /historical-data/)
+# Historical foreign trade data queries (POST /historical-data)
 # =========================================================================
 
 #' Query historical foreign trade data (1989-1996)
@@ -26,7 +26,9 @@
 #'   Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `TRUE`.
 #'
-#' @return A data.frame (or tibble) with query results.
+#' @return A data.frame (or tibble if available) with query results.
+#'   Metric columns (`metricFOB`, `metricKG`, ...) are numeric and
+#'   `year` / `monthNumber` are integer; all other columns are character.
 #'
 #' @details
 #' Historical data differs from general data:
@@ -35,6 +37,10 @@
 #' - Product classification is **NBM** (not NCM)
 #' - Only **FOB and KG** metrics are available (no statistic, freight,
 #'   insurance, or CIF)
+#' - The API ignores the months in the period and always returns whole
+#'   years. With `month_detail = TRUE` the result is trimmed to the
+#'   requested months; with `month_detail = FALSE` the yearly totals cover
+#'   full years and a warning is issued if the period is not whole years.
 #'
 #' @examples
 #' \dontrun{
@@ -96,10 +102,28 @@ comex_historical <- function(flow = "export",
     metrics     = as.list(metrics)
   )
 
-  # Note: the API spec defines this endpoint with a trailing slash
-  data <- comex_post("/historical-data/", body,
+  # No trailing slash: "/historical-data/" is blocked by Cloudflare (HTTP 403)
+  data <- comex_post("/historical-data", body,
                      query = list(language = language), verbose = verbose)
-  result <- response_to_df(data)
+  result <- convert_query_types(response_to_df(data))
+
+  # The endpoint ignores the months in `period` and always returns whole
+  # years, so trim to the requested months when they are available.
+  whole_years <- substr(start_period, 6, 7) == "01" &&
+    substr(end_period, 6, 7) == "12"
+  if (!whole_years) {
+    if (all(c("year", "monthNumber") %in% names(result))) {
+      ym <- sprintf("%04d-%02d", as.integer(result$year),
+                    as.integer(result$monthNumber))
+      result <- result[ym >= start_period & ym <= end_period, , drop = FALSE]
+    } else {
+      cli::cli_warn(c(
+        "!" = "The historical endpoint only aggregates whole years.",
+        "i" = "Results cover {substr(start_period, 1, 4)}-01 to {substr(end_period, 1, 4)}-12.",
+        "i" = "Use {.code month_detail = TRUE} to restrict to the requested months."
+      ))
+    }
+  }
 
   if (verbose && nrow(result) > 0) {
     cli::cli_alert_success("{nrow(result)} records found")

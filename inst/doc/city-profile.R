@@ -38,8 +38,8 @@ knitr::opts_chunk$set(
 # imports_total
 
 ## ----balance------------------------------------------------------------------
-# balance <- as.numeric(exports_total$metricFOB) -
-#            as.numeric(imports_total$metricFOB)
+# balance <- exports_total$metricFOB -
+#            imports_total$metricFOB
 
 ## ----top-countries------------------------------------------------------------
 # top_export_countries <- comex_query_city(
@@ -52,7 +52,7 @@ knitr::opts_chunk$set(
 # )
 # 
 # top_export_countries <- top_export_countries[
-#   order(-as.numeric(top_export_countries$metricFOB)),
+#   order(-top_export_countries$metricFOB),
 # ]
 # head(top_export_countries, 10)
 # 
@@ -65,7 +65,7 @@ knitr::opts_chunk$set(
 #   month_detail = FALSE
 # )
 # top_import_countries <- top_import_countries[
-#   order(-as.numeric(top_import_countries$metricFOB)),
+#   order(-top_import_countries$metricFOB),
 # ]
 # head(top_import_countries, 10)
 
@@ -80,7 +80,7 @@ knitr::opts_chunk$set(
 # )
 # 
 # exports_by_bloc <- exports_by_bloc[
-#   order(-as.numeric(exports_by_bloc$metricFOB)),
+#   order(-exports_by_bloc$metricFOB),
 # ]
 # exports_by_bloc
 
@@ -95,7 +95,7 @@ knitr::opts_chunk$set(
 # )
 # 
 # top_export_products <- top_export_products[
-#   order(-as.numeric(top_export_products$metricFOB)),
+#   order(-top_export_products$metricFOB),
 # ]
 # head(top_export_products, 10)
 
@@ -123,9 +123,9 @@ knitr::opts_chunk$set(
 ## ----monthly-plot-------------------------------------------------------------
 # # Example with base R
 # exports_monthly$date <- as.Date(
-#   sprintf("%s-%s-01", exports_monthly$year, exports_monthly$monthNumber)
+#   sprintf("%d-%02d-01", exports_monthly$year, exports_monthly$monthNumber)
 # )
-# exports_monthly$fob_musd <- as.numeric(exports_monthly$metricFOB) / 1e6
+# exports_monthly$fob_musd <- exports_monthly$metricFOB / 1e6
 # 
 # plot(
 #   exports_monthly$date, exports_monthly$fob_musd,

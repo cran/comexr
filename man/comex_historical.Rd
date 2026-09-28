@@ -44,7 +44,9 @@ Default: \code{"en"}.}
 \item{verbose}{Logical. Show progress messages. Default: \code{TRUE}.}
 }
 \value{
-A data.frame (or tibble) with query results.
+A data.frame (or tibble if available) with query results.
+Metric columns (\code{metricFOB}, \code{metricKG}, ...) are numeric and
+\code{year} / \code{monthNumber} are integer; all other columns are character.
 }
 \description{
 Query the historical data endpoint of the ComexStat API to retrieve
@@ -60,6 +62,10 @@ Historical data differs from general data:
 \item Product classification is \strong{NBM} (not NCM)
 \item Only \strong{FOB and KG} metrics are available (no statistic, freight,
 insurance, or CIF)
+\item The API ignores the months in the period and always returns whole
+years. With \code{month_detail = TRUE} the result is trimmed to the
+requested months; with \code{month_detail = FALSE} the yearly totals cover
+full years and a warning is issued if the period is not whole years.
 }
 }
 \examples{

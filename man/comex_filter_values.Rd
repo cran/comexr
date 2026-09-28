@@ -4,14 +4,20 @@
 \alias{comex_filter_values}
 \title{Get values for a specific filter}
 \usage{
-comex_filter_values(filter, type = "general", language = "en", verbose = FALSE)
+comex_filter_values(
+  filter,
+  type = c("general", "city", "historical"),
+  language = "en",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{filter}{Filter name as returned by \code{\link[=comex_filters]{comex_filters()}}
 (e.g. \code{"country"}, \code{"state"}, \code{"ncm"}, \code{"economicBlock"},
 \code{"BECLevel1"}, \code{"SITCSection"}, \code{"ISICSection"}).}
 
-\item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.}
+\item{type}{Data type: \code{"general"} (default), \code{"city"}, or
+\code{"historical"}.}
 
 \item{language}{Language: \code{"pt"}, \code{"en"}, or \code{"es"}. Default: \code{"en"}.}
 

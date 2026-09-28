@@ -4,10 +4,11 @@
 \alias{comex_last_update}
 \title{Get last data update date}
 \usage{
-comex_last_update(type = "general", verbose = FALSE)
+comex_last_update(type = c("general", "city", "historical"), verbose = FALSE)
 }
 \arguments{
-\item{type}{Data type: \code{"general"}, \code{"city"}, or \code{"historical"}.
+\item{type}{Data type: \code{"general"} (default), \code{"city"}, or
+\code{"historical"}.
 Default: \code{"general"}.}
 
 \item{verbose}{Logical. Show progress messages. Default: \code{FALSE}.}

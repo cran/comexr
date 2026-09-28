@@ -33,7 +33,9 @@
 #'   Default: `"en"`.
 #' @param verbose Logical. Show progress messages. Default: `TRUE`.
 #'
-#' @return A data.frame (or tibble) with query results.
+#' @return A data.frame (or tibble if available) with query results.
+#'   Metric columns (`metricFOB`, `metricKG`, ...) are numeric and
+#'   `year` / `monthNumber` are integer; all other columns are character.
 #'
 #' @details
 #' City-level data differs from general data:
@@ -98,7 +100,7 @@ comex_query_city <- function(flow = "export",
 
   data <- comex_post("/cities", body,
                      query = list(language = language), verbose = verbose)
-  result <- response_to_df(data)
+  result <- convert_query_types(response_to_df(data))
 
   if (verbose && nrow(result) > 0) {
     cli::cli_alert_success("{nrow(result)} records found")

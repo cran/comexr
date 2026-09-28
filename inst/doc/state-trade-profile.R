@@ -60,9 +60,7 @@ knitr::opts_chunk$set(
 # head(pe)
 
 ## ----cast---------------------------------------------------------------------
-# pe$metricFOB <- as.numeric(pe$metricFOB)
-# pe$metricKG  <- as.numeric(pe$metricKG)
-# pe$date      <- as.Date(sprintf("%s-%s-01", pe$year, pe$monthNumber))
+# pe$date <- as.Date(sprintf("%d-%02d-01", pe$year, pe$monthNumber))
 
 ## ----monthly------------------------------------------------------------------
 # monthly <- aggregate(metricFOB ~ date + flow, data = pe, FUN = sum)
@@ -168,7 +166,6 @@ knitr::opts_chunk$set(
 # )
 # yearly_exp$flow <- "export"; yearly_imp$flow <- "import"
 # yearly <- rbind(yearly_exp, yearly_imp)
-# yearly$metricFOB <- as.numeric(yearly$metricFOB)
 # yearly  # one row per year × flow
 
 ## ----adapt--------------------------------------------------------------------
